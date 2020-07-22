@@ -9,10 +9,36 @@ import { Provider } from 'react-redux';
 import logger from 'redux-logger';
 // Import saga middleware
 import createSagaMiddleware from 'redux-saga';
+import { takeEvery, put} from 'redux-saga/effects';
+import Axios from 'axios';
 
 // Create the rootSaga generator function
 function* rootSaga() {
+    yield takeEvery('FETCH_BASKET', getFruitSaga)
+    yield takeEvery('ADD_BASKET', postFruitSaga)
 
+}
+
+function* getFruitSaga(action) {
+    try{
+        const response = yield Axios.get('/fruit');
+        yield put({
+            type: 'SET_BASKET',
+            payload: response.data
+        });
+    } catch (err){
+        console.log('error in getFruitSaga', err);
+    }
+    
+}
+
+function* postFruitSaga(action){
+    try{
+        yield Axios.post('/fruit');
+        
+    } catch (err){
+        console.log('error in post', err);
+    }
 }
 
 // Create sagaMiddleware

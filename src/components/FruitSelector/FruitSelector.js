@@ -6,28 +6,12 @@ class FruitSelector extends Component {
 
     // Currying that returns a function
     addFruit = (fruitName) => (event) => {
-        axios({
-            method: 'POST',
-            url: '/fruit',
-            data: { fruit: fruitName }
-        }).then((response) => {
-            this.getFruit();
-        }).catch((error) => {
-            console.log(error);
-            alert('Unable to save fruit');
-        });
+       this.props.dispatch({type: 'ADD_BASKET', payload: fruitName})
     }
 
     getFruit() {
-        axios({
-            method: 'GET',
-            url: '/fruit'
-        }).then((response) => {
-            const action = { type: 'SET_BASKET', payload: response.data };
-            this.props.dispatch(action);
-        }).catch((error) => {
-            alert('Unable to get basket from server');
-        });
+        console.log('running getFruit');
+        this.props.dispatch({type: 'FETCH_BASKET'});
     }
 
     // Displays the fruit selection buttons on the DOM
